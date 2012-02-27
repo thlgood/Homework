@@ -54,7 +54,7 @@ int main(int argc, char *argv[])
 	{
 		write(tmp_fd, &buf[--bufprint], 1);
 	}
-		//putchar(buf[--bufprint]);
+
 	close(fd);
 	close(tmp_fd);
 	free(buf);
