@@ -1,1 +1,11 @@
-yes, No
+Once upon a time…
+It doesn’t seem long ago that I struggled to convince corporate IT that Apache on Linux was not only a viable alternative to IIS, but the superior choice. Whilst I’m not a big fan of windows for web servers – that’s largely a personal preference. IIS is actually a very capable web server; I’ve seen it stand up to quite a pounding. Of course, you need to patch it regularly, but the bottom line is it works perfectly fine. That is, until you try to configure it.
+The biggest weakness in IIS is configurability.
+Point and clicky configuration really is one of the stupidest ideas to come out of Redmond, particularly when that configuration can’t be edited or diffed as a simple text file. Have you ever tried replicating IIS settings to a DR machine? (Thank goodness for Vmware).
+Configuration: Simple, but not stupid!
+Apache really wins out in the configuration and configurability department. Apache is far more than just a web server, it’s the undisputed heavyweight champ of HTTP; if you can’t do it in Apache (either you’re doing something wrong, or) you can write a module to do it.
+The King is here
+In short, Apache is brilliant – it has set the benchmark as the practical, reliable utilitarian web server – it is probably responsible for more Linux server deployments than anything else.
+In fact, I’d dare to say that Apache is the killer app for Linux.
+I’ve deployed Apache in all shapes and sizes, in many configurations, as web servers, as reverse proxies, behind different load balancers and SSL accelerators – always with success. In short, this is why I don’t believe banking and finance will be in a hurry to move on from Apache and embrace the new darling of the RoR crowd, nginx.
+The next great HTTPD
