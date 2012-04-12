@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include <string.h>
 
+#ifdef BUFSIZ
+#undef BUFSIZ
+#define BUFSIZ 10000
+
 int main(int argc, char *argv[])
 {
 	FILE 	*fp = NULL;
@@ -46,3 +50,4 @@ int main(int argc, char *argv[])
 	fclose(fp);
 	return 0;
 }
+#endif
