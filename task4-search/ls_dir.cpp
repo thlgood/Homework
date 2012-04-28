@@ -1,28 +1,17 @@
 #include <unistd.h>
-#include <stdio.h>
 #include <sys/param.h>  //for PATH_MAX
 #include <limits.h>     //for realpath
 #include <dirent.h>
 #include <sys/stat.h>
 #include <stdlib.h>
 #include <string.h>
-
-void ls_dir(const char *resolved_path); // resolved_path != NULL
-
-int main(int argc, char *argv[])
-{
-    char temp[PATH_MAX];
-    realpath(argv[1], temp);
-    ls_dir(temp);
-    return 0;
-}
+#include "head.h"
 
 void ls_dir(const char *resolved_path)
 {
     struct dirent *entry;
     struct stat stat_buf;
     DIR *dp;
-//    printf("K:%s\n", resolved_path);
     if (resolved_path == NULL)
     {
         fputs("resolved_path == NULL\n", stderr);
@@ -50,9 +39,10 @@ void ls_dir(const char *resolved_path)
             if (S_ISDIR(stat_buf.st_mode))
                 ls_dir(path_temp);
             else
-//                printf("D:");
-
-                printf("%s\n", path_temp);
+            {
+                string path_str(path_temp);
+                all_paths.push_back(path_str);
+            }
         }
     }
     free(dp);

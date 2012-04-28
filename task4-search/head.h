@@ -7,6 +7,9 @@
 void search(const char* path);
 
 void checkArgs(int *argc, char ***argv);
+void ls_dir(const char *resolved_path);
+int search(const char *file_path, const char *id);
+void autosearch();
 
 /*extern int thread_count;
 extern char *path;*/
