@@ -10,7 +10,7 @@
 int search(const char *file_path, const char *id)
 {
     int file_d;                     //file descriptor
-    char *flag = content;
+    char *flag = NULL;
     char *dst = NULL;
     char *ct_head;                  //content_first_char
     char *content;
@@ -25,7 +25,7 @@ int search(const char *file_path, const char *id)
         return 0;
     }
 
-    content = ct_head = (char *) malloc(BUF_LEN * mem_block_count++);
+    flag = content = ct_head = (char *) malloc(BUF_LEN * mem_block_count++);
 
     while (read_len == BUF_LEN)
     {
@@ -58,6 +58,7 @@ int search(const char *file_path, const char *id)
             line = (*flag == '\n') ? line+1 : line;
             flag++;
         }
+        flag = content;
     }
 end:
     close(file_d);

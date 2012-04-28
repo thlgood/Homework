@@ -2,7 +2,7 @@
 #include <pthread.h>
 #include <vector>
 #include <string>
-
+//extern int thread_count;
 
 int main(int argc, char *argv[])
 {
@@ -10,13 +10,13 @@ int main(int argc, char *argv[])
     checkArgs(&argc, &argv);
 
     //Create threads
-    thread_t thread_all[thread_count];
+    pthread_t thread_all[pthread_count];
     int t_count;
 
-    for (t_count = 0; t_count < thread_count, t_count++)
-        pthread_create(&thread_all[t_count], NULL, autosearch, (void*)one[count]);
+    for (t_count = 0; t_count < pthread_count; t_count++)
+        pthread_create(&thread_all[t_count], NULL, autosearch, NULL);
 
-    for (t_count = 0; t_count < thread_count, t_count++)
+    for (t_count = 0; t_count < pthread_count; t_count++)
         pthread_join(thread_all[t_count], NULL);
 
     return 0;

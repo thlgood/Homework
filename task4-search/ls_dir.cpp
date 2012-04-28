@@ -6,6 +6,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "head.h"
+#include <string>
 
 void ls_dir(const char *resolved_path)
 {
@@ -28,8 +29,7 @@ void ls_dir(const char *resolved_path)
         struct stat stat_buf;
         char path_temp[PATH_MAX];
         memcpy(path_temp, resolved_path, PATH_MAX);
-        if (strcmp(entry->d_name,  ".") &&
-            strcmp(entry->d_name, ".."))
+        if (strcmp(entry->d_name,  ".") && strcmp(entry->d_name, ".."))
         {
 
             strcat(path_temp, "/");
@@ -37,10 +37,12 @@ void ls_dir(const char *resolved_path)
             lstat(path_temp, &stat_buf);
 
             if (S_ISDIR(stat_buf.st_mode))
+            {
                 ls_dir(path_temp);
+            }
             else
             {
-                string path_str(path_temp);
+                std::string path_str(path_temp);
                 all_paths.push_back(path_str);
             }
         }

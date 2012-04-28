@@ -1,22 +1,21 @@
 #include "head.h"
 #include <string>
+#include <string.h>
 
-/*extern int thread_count;
-extern char *all_paths;*/
 
-void checkArgs(int &argc, char ***argv)
+void checkArgs(int *argc, char ***argv)
 {
     int searched = 0;
     paths_mutex = PTHREAD_MUTEX_INITIALIZER;
-    thread_count = 1;
-    if (argc < 3)
+    pthread_count = 1;
+    if (*argc < 3)
     {
-        fputs("Too argument!", stderr);
+        fputs("Too argument!\n", stderr);
         exit(1);
     }
-    if (argv[1] == "-j")
+    if (!strcmp(*argv[1],  "-j"))
     {
-        thread_count = argv[2];
+        pthread_count = (int)(*argv[2][0]- '0');
         id = *argv[3];
         ls_dir(*argv[4]);
     }
