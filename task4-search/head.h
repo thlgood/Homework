@@ -9,7 +9,7 @@
 //void search(const char* path);
 //int search(const char *file_path, const char *id)
 void checkArgs(int *argc, char ***argv);
-void ls_dir(const char *resolved_path);
+void catDIR(const char *re_path);
 void *autosearch(void *args_no_use);
 
 int search(const char *file_path, const char *id);

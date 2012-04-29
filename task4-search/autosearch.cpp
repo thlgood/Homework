@@ -6,7 +6,6 @@
 #include <string>
 using namespace std;
 
-//int search(const char *file_path, const char *id);
 
 void *autosearch(void *arg_no_use)
 {
@@ -16,8 +15,6 @@ void *autosearch(void *arg_no_use)
         pthread_mutex_lock(&paths_mutex);
         if(all_paths.size())
         {
-            /*char *dst = (char *)malloc(PATH_MAX);
-            strcpy(dst, all_paths.back().c_str());*/
             line = search(all_paths.back().c_str(), id.c_str());
             if (line > 0)
                 printf("%d: %s\n", line, all_paths.back().c_str());
@@ -26,7 +23,6 @@ void *autosearch(void *arg_no_use)
         else
         {
             pthread_mutex_unlock(&paths_mutex);
-            //pthread_exit(NULL);
             break;
         }
         pthread_mutex_unlock(&paths_mutex);
