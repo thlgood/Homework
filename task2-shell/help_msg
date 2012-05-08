@@ -1,0 +1,16 @@
+usage:
+	1.myshell [file]...
+	2.myshell
+内置的命令：
+	cd <directory>  :进入目录
+	environ         :输出环境变量
+	help            :输出帮助
+	jobs            :输出子进程的PID和命名
+	exit|quit|bye   :退出
+===================================================
+作者：唐恒亮(10级计算机三班)
+学号：1005010305
+邮箱：yucoat@yucoat.com
+
+如果您发现该程序有任何BUG，请与我联系，谢谢合作！
+本shell程序以GPL（http://www.gnu.org/licenses/gpl.html）协议发布
