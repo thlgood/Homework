@@ -8,7 +8,7 @@
 #include "myshell.h"
 #include <limits.h>	// for PATH_MAX macro
 #include <errno.h>
-
+#include <string.h>	// for strerror
 
 /* 
  * 原型：char *cd(const char *path)
