@@ -6,9 +6,11 @@
 #include <stdlib.h>
 #include <assert.h>
 #include <errno.h>
+#include "line_info.h"
 
 extern const char internal;
 
 bool help();
+void wait_child(int sig_type);
 
 #endif
