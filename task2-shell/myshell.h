@@ -7,6 +7,7 @@
 #include <assert.h>
 #include <errno.h>
 #include "line_info.h"
+#include <string.h>
 
 extern const char internal;
 

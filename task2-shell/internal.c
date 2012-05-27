@@ -7,9 +7,9 @@
 
 const 
 char internal[7][10] = {"cd"  ,			//change directory
-			"environ",		//print environ
-			"echo", 		//print message
-			"help", 		//print help infomathin
-			"jobs", 		//print PID & cmd
-			"quit", "bye", "exit"	//quit
+			"environ",					//print environ
+			"echo", 					//print message
+			"help", 					//print help infomathin
+			"jobs", 					//print PID & cmd
+			"quit", "bye", "exit"		//quit
 };

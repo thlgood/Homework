@@ -11,7 +11,7 @@
 #define OUTPUT(arg)	printf("> %s", arg)
 #define INPUT(line)	fgets(line, 1024, stdin)
 
-int main(int argc, char *argv[])
+int main(int argc, char *argv[], char **envp)
 {
 	char line[1024];	//行缓冲
 	if (argc != 1 && !strcmp(argv[2], "-v"))
@@ -37,34 +37,28 @@ int main(int argc, char *argv[])
 
 		if (this_line.is_internal)
 		{
-			run_internal(&this_line);
+			run_internal(&this_line, envp);
 		}
-		else if (!this_line.is_internal)
-		{
+		else if (!this_line.is_internal) {
 			signal(SIGCHID, wait_child);
 
 			this_line.pid = fork();
-			if (pid < 0)
-			{
+			if (pid < 0) {
 				perror("fork");
 				continue;
 			}
-			else
-			{
-				if (this_line.pid != 0)
-				{
+			else {
+				if (this_line.pid != 0) {
 					add_to_child_list(&this_line);
 				}
-				else
-				{
+				else {
 					//Wrap exec
 					run_external(&this_line);
 				}
 			}
 
 		}
-		else
-		{
+		else {
 			fputs("Can't parser this command!\n", stderr);
 			continue;
 		}
