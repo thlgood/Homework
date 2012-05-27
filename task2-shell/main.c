@@ -14,18 +14,15 @@
 int main(int argc, char *argv[], char **envp)
 {
 	char line[1024];	//行缓冲
-	if (argc != 1 && !strcmp(argv[2], "-v"))
-	{
-		int fd;
-		fd = open(argv[1], O_RDONLY);
-		if (fd < 0)
-		{
+	if (argc != 1 && !strcmp(argv[2], "-v")) {
+		int fd = open(argv[1], O_RDONLY);
+		if (fd < 0) {
 			strerror(errno);
 			exit (1);
 		}
-
 		freopen(argv[1], "r", "stdin");
 	}
+
 	while (1)
 	{
 
