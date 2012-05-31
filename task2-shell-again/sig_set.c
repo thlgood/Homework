@@ -1,4 +1,5 @@
 #include "Tshell.h"
+#include "PL.h"
 #include <signal.h>
 #include <unistd.h>
 
@@ -6,6 +7,12 @@ static void wait_child(int sig_type)
 {
 	int status;
 	pid_t pid = wait(&status);
+	del_from_PL(pid);
+	/*
+	if (del_from_PL(pid) != true)
+	{
+		fprintf(stderr, "DELETE %d from PL was failure!\n", pid);
+	}*/
 }
 
 void signal_set()

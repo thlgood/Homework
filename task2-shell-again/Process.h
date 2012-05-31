@@ -2,7 +2,8 @@
 #define PROCESS_H
 #include "Tshell.h"
 
-typedef struct {
+typedef struct
+{
 	char **vect;
 	pid_t pid;
 	bool is_daemon;

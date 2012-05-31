@@ -2,23 +2,28 @@
 
 void init_arg(int argc, char *argv[])
 {
-	switch(argc) {
+	switch(argc)
+    	{
 		case 1:
 			break;
 		case 2:
-			if (!strcmp("-v", argv[1])) {
+			if (!strcmp("-v", argv[1]))
+			{
 				run_mode = IS_DEBUG_MODE;
 			}
-			else {
+			else
+			{
 				freopen(argv[1], "r", stdin);
 			}
 			break;
 		case 3:
 			run_mode = IS_DEBUG_MODE;
-			if (strcmp("-v", argv[1])){
+			if (strcmp("-v", argv[1]))
+			{
 				freopen(argv[1], "r", stdin);
 			}
-			else {
+			else
+			{
 				freopen(argv[2], "r", stdin);
 			}
 			break;
@@ -26,4 +31,10 @@ void init_arg(int argc, char *argv[])
 			fputs("Too much argument!", stderr);
 			exit(EXIT_FAILURE);
 	}
+}
+
+char *IN_STD(char *a)
+{
+	printf("%s", PS2);
+	return fgets(a, BUF_LEN, stdin);
 }

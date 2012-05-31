@@ -1,11 +1,14 @@
 #ifndef TS_PL_H
 #define TS_PL_H
+
 #include "Tshell.h"
+#include "Process.h"
 
 
 //--------------- Process ----------------
 //PL:Process List
-struct PL { 
+struct PL
+{ 
 	pid_t pid;
 	char cmd[32];
 	char **vect;	//String to vect for execvp
@@ -15,12 +18,11 @@ typedef struct PL PL;
 
 // malloc PL
 #define MALLOC_PL	(PL *)malloc(sizeof(PL))
-
-//Process List head & tail
-PL *PL_head = NULL;
-PL *PL_tail = NULL;
+extern PL *PL_head;
+extern PL *PL_tail;
 
 void show_PL();
 bool add_to_PL(Process *child);
-bool free_PL();
+bool del_from_PL(pid_t pid);
+void free_PL();
 #endif
