@@ -9,7 +9,7 @@
 int main(int argc, char *argv[])
 {
 	FILE 	*fp = NULL;
-	char	*buf = malloc(sizeof(char)*BUFSIZ);
+	char	*buf = (char *)malloc(sizeof(char)*BUFSIZ);
 
 	size_t	bufused = 0;
 	size_t  buflen = BUFSIZ;
@@ -48,6 +48,7 @@ int main(int argc, char *argv[])
 		fwrite(&buf[--bufused], sizeof(char), 1, fp);
 
 	fclose(fp);
+	free(buf);
 	return 0;
 }
 #endif
