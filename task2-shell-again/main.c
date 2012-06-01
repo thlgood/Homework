@@ -10,8 +10,13 @@ int main(int argc, char *argv[], char *envp[])
 	signal_set();
 	while (1) 
 	{
-		IN_STD(Line);
-		Line[strlen(Line)-1] = '\0';
+/*		fputs(PS2, stdout);
+		fgets(Line, BUF_LEN, stdin);*/
+		if (input(Line) == false)
+		{
+//			puts("check_line_false");
+			continue;
+		}
 		if (is_internal(Line))
 		{
 			run_internal(Line);
@@ -66,6 +71,7 @@ int main(int argc, char *argv[], char *envp[])
 				perror("execvp");
 				exit(1);
 			}
+			clean_process(&child);
 		}
 	}
 	return 0;

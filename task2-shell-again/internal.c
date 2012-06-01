@@ -69,9 +69,9 @@ bool run_internal(char *p)
 	else if (!(strcmp(cmd, "echo")))
    	{
 		if (NULL != arg)
-			printf("%s", arg);
+			printf("%s\n", arg);
 		else
-			fputs("\n", stdout);
+			fputs("", stdout);
 	}
 	else if (!strcmp(cmd, "jobs"))
    	{

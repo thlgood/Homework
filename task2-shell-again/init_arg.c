@@ -33,8 +33,49 @@ void init_arg(int argc, char *argv[])
 	}
 }
 
-char *IN_STD(char *a)
+bool input(char *line)
 {
-	printf("%s", PS2);
-	return fgets(a, BUF_LEN, stdin);
+	int count = 0;
+	line[BUF_LEN - 1] = '\0';
+	char buf;
+
+	fputs("Input> ", stdout);
+
+	while (count < (BUF_LEN) && (buf = getchar()))
+	{
+		if (0 == count)
+		{
+			if (buf == '\n')
+			{
+				return false;
+			}
+			else if (buf == EOF)
+			{
+				putchar('\n');
+				return false;
+			}
+			else if (buf == ' '|| buf == '\t')
+			{
+				continue;
+			}
+			else
+			{
+				line[0] = buf;
+				count++;
+			}
+		}
+		else
+		{
+			if (buf == '\n' || buf == EOF)
+			{
+				line[count] = '\0';
+				return true;
+			}
+			line[count] = buf;
+			count++;
+		}
+	}
+	line[BUF_LEN-1] = '\0';
+	return true;
 }
+
