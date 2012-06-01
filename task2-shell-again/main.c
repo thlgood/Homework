@@ -10,11 +10,8 @@ int main(int argc, char *argv[], char *envp[])
 	signal_set();
 	while (1) 
 	{
-/*		fputs(PS2, stdout);
-		fgets(Line, BUF_LEN, stdin);*/
 		if (input(Line) == false)
 		{
-//			puts("check_line_false");
 			continue;
 		}
 		if (is_internal(Line))
