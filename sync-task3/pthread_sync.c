@@ -1,3 +1,6 @@
+/*
+ *任务三:进程/线程同步
+ */
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
@@ -6,9 +9,7 @@
 #define LOCK(a)     pthread_mutex_lock(a)
 #define UNLOCK(a)   pthread_mutex_unlock(a)
 #define TRY_LOCK(a) pthread_mutex_trylock(a)
-
 #define TIME        30 
-
 #define DEBUG
 
 typedef pthread_mutex_t Pmt;
