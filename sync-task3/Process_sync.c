@@ -14,12 +14,13 @@
 #define SEM_COUNT	5
 #define FINISHED    1
 #define UNFINISHED  2
-#define TIME        10 
+#define TIME        4 
 
 void seminit();
 void print(int id, int count);
 void finish_opt(int id);
 void try_opt(int id);
+void fork_process(int n);
 
 int flag = -1;
 int Sem  = -1;
@@ -34,19 +35,13 @@ union semun
 int main()
 {
 	int   i;
-	pid_t child[5];
+	pid_t ppid = getpid();
+	print (1, TIME);
+	seminit();	
 
-	seminit();
-
-	for(i = 0; i < 5; i++)
+	fork_process(5);
+	if (getpid() == ppid)
 	{
-		child[i] = fork();
-		if (child[i] == 0)
-			flag = i + 2;
-	}
-	if (flag == -1)
-	{
-		print (1, TIME);
 		for (i = 0; i < 5; i++)
 		{
 			int status;
@@ -91,8 +86,8 @@ int main()
 void seminit()
 {
 	int i;
-	key_t key = ftok("./key", 'E');
-	Sem = semget(key, SEM_COUNT, 0666|IPC_CREAT|IPC_EXCL);
+//	key_t key = ftok("./key", 'E');
+	Sem = semget(IPC_PRIVATE, SEM_COUNT, 0666|IPC_CREAT|IPC_EXCL);
 	if (Sem < 0)
 	{
 		if (errno != EEXIST)
@@ -101,28 +96,36 @@ void seminit()
 			exit(EXIT_FAILURE);
 		}
 	}
-
-	for (i = 0; i < SEM_COUNT; i++)
-	{
-		union semun semval;
-		semval.val = 0;
-		int retV = semctl(Sem, i, SETVAL, semval);
-		assert(retV >= 0);
-	}
 }
 
 void try_opt(int id)
 {
-	struct sembuf spos = {id, -1, 0};
+	struct sembuf spos;
+	spos.sem_num = id;
+	spos.sem_op  = -1;
+	spos.sem_flg = SEM_UNDO;
+
 	int retV = semop(Sem, &spos, 1);
-	assert(retV > 0);
+	if (retV == -1)
+	{
+		perror("semop in try");
+		printf("ID:%d\n", id);
+	}
 }
 
 void finish_opt(int id)
 {
-	struct sembuf spos = {id, 1, IPC_NOWAIT};
+	struct sembuf spos;
+	spos.sem_num = id;
+	spos.sem_op  = 1;
+	spos.sem_flg = SEM_UNDO;
+
 	int retV = semop(id, &spos, 1);
-	assert(retV >= 0);
+	if (retV == -1)
+	{
+		perror("semop in finish_opt");
+		printf("ID:%d\n", id);
+	}
 }
 
 
@@ -131,5 +134,21 @@ void print(int id, int count)
 	while (count--)
 	{
 		printf("I am Process %d\n", id);
+		sleep(1);
+	}
+}
+
+void fork_process(int n)
+{
+	pid_t pid;
+
+	for (flag = 0; flag < n; flag++ )
+	{
+		pid = fork();
+		if (pid == 0)
+		{
+			flag = flag + 2;
+			break;
+		}
 	}
 }
