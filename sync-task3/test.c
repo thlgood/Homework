@@ -16,28 +16,15 @@ union semun
 	struct seminfo *__buf;
 };
 
-void print(int id, int count)
-{
-	while (count--)
-	{
-		printf("I am Process %d\n", id);
-	//	sleep(1);
-	}
-}
 
 void seminit()
 {
 	int i;
-//	struct sembuf spos[1];
 	struct sembuf spos;
 	spos.sem_num = 0;
 	spos.sem_op  = 1;
 	spos.sem_flg = SEM_UNDO;
 
-//	union semun arg;
-//	unsigned short group[1] = {0};
-
-//	arg.array = group;
 	Sem = semget(IPC_PRIVATE, 1, 0666|IPC_CREAT|IPC_EXCL);
 	if(semop(Sem, &spos, 1) == -1)
 	{
@@ -46,37 +33,6 @@ void seminit()
 	printf("Sem = %d\n", Sem);
 }
 
-void try_opt(int id)
-{
-	struct sembuf spos;
-	spos.sem_num = id;
-	spos.sem_op  = -1;
-	spos.sem_flg = SEM_UNDO;
-
-	int retV = semop(Sem, &spos, 1);
-	if (retV == -1)
-	{
-		perror("semop in try");
-		printf("ID:%d\n", id);
-	}
-}
-
-void finish_opt(int id)
-{
-	struct sembuf spos;
-	spos.sem_num = id;
-	spos.sem_op  = 1;
-	spos.sem_flg = SEM_UNDO;
-
-	int retV = semop(id, &spos, 1);
-	if (retV == -1)
-	{
-		perror("semop in finish_opt");
-		printf("ID:%d\n", id);
-	}
-}
-
-
 int main (int argc, char *argv[]) 
 {
 	seminit();
@@ -84,16 +40,27 @@ int main (int argc, char *argv[])
 	
 	if (!pid)
 	{
-		try_opt(0);
+		struct sembuf spos = {0, -1, SEM_UNDO};
+		if (semop(Sem, &spos, 1) == -1)
+		{
+			perror("semop in son");
+			exit(1);
+		}
+		printf("SON Process\n");
 	}
 	else
 	{
-		print(1, 1);
-		finish_opt(0);
-	}
+		printf("FATHER Process\n");
+		struct sembuf spos = {0, -1, SEM_UNDO};
 
-	int status;
-	wait(&status);
+		if (semop(Sem, &spos, 1) == -1)
+		{
+			perror("semop in father");
+			exit(1);
+		}
+		int status;
+		wait(&status);
+	}
 	return 0;
 }
 
