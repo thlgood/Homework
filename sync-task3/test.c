@@ -1,41 +1,99 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/ipc.h>
+#include <sys/types.h>
+#include <sys/sem.h>
+#include <assert.h>
 #include <unistd.h>
+#include <errno.h>
+#define SEM_COUNT	1
+int Sem  = -1;
+union semun
+{
+	int val;
+	struct semid_ds *buf;
+	unsigned short *array;
+	struct seminfo *__buf;
+};
 
-void forkChildren (int nChildren) {
-    int i;
-    pid_t pid;
-    for (i = 1; i <= nChildren; i++) {
-        pid = fork();
-        if (pid == -1)
-		{
-            /* error handling here, if needed */
-            return;
-        }
-        if (pid == 0)
-		{
-            printf("I am a child: %d PID: %d PPID: %d\n",i, getpid(), getppid());
-  //          sleep (5);
-            return;
-        }
-    }
+void print(int id, int count)
+{
+	while (count--)
+	{
+		printf("I am Process %d\n", id);
+	//	sleep(1);
+	}
 }
 
-int main (int argc, char *argv[]) {
-    if (argc < 2)
-	{
-        forkChildren (2);
-    } 
-	else 
-	{
-        forkChildren (atoi (argv[1]));
-    }
+void seminit()
+{
 	int i;
-	for (i = 0; i < atoi(argv[1]); i++)
+//	struct sembuf spos[1];
+	struct sembuf spos;
+	spos.sem_num = 0;
+	spos.sem_op  = 1;
+	spos.sem_flg = SEM_UNDO;
+
+//	union semun arg;
+//	unsigned short group[1] = {0};
+
+//	arg.array = group;
+	Sem = semget(IPC_PRIVATE, 1, 0666|IPC_CREAT|IPC_EXCL);
+	if(semop(Sem, &spos, 1) == -1)
 	{
-		int status;
-		wait(&status);
+		perror("----44---");
 	}
-    return 0;
+	printf("Sem = %d\n", Sem);
+}
+
+void try_opt(int id)
+{
+	struct sembuf spos;
+	spos.sem_num = id;
+	spos.sem_op  = -1;
+	spos.sem_flg = SEM_UNDO;
+
+	int retV = semop(Sem, &spos, 1);
+	if (retV == -1)
+	{
+		perror("semop in try");
+		printf("ID:%d\n", id);
+	}
+}
+
+void finish_opt(int id)
+{
+	struct sembuf spos;
+	spos.sem_num = id;
+	spos.sem_op  = 1;
+	spos.sem_flg = SEM_UNDO;
+
+	int retV = semop(id, &spos, 1);
+	if (retV == -1)
+	{
+		perror("semop in finish_opt");
+		printf("ID:%d\n", id);
+	}
+}
+
+
+int main (int argc, char *argv[]) 
+{
+	seminit();
+	pid_t pid = fork();
+	
+	if (!pid)
+	{
+		try_opt(0);
+	}
+	else
+	{
+		print(1, 1);
+		finish_opt(0);
+	}
+
+	int status;
+	wait(&status);
+	return 0;
 }
 

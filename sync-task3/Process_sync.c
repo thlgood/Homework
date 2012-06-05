@@ -54,7 +54,7 @@ int main()
 	{
 		case 2:
 			print (2, TIME);
-			finish_opt(0);
+			finish_opt(4);
 			finish_opt(1);
 			break;
 		case 3:
@@ -135,7 +135,7 @@ void finish_opt(int id)
 	spos.sem_op  = 1;
 	spos.sem_flg = SEM_UNDO;
 
-	int retV = semop(id, &spos, 1);
+	int retV = semop(id, &spos, SEM_COUNT);
 	if (retV == -1)
 	{
 		perror("semop in finish_opt");
