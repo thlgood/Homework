@@ -1,11 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <pthread.h>
+#include <assert.h>
 
 #define LOCK(a)     pthread_mutex_lock(a)
 #define UNLOCK(a)   pthread_mutex_unlock(a)
 #define TRY_LOCK(a) pthread_mutex_trylock(a)
-#define TIME        14 
+
+#define TIME        30 
 
 #define DEBUG
 
@@ -16,12 +18,17 @@ Pmt mutex[5];
 
 int main()
 {
-	int i;
-	int arg[5];
+	int       i;
+	int       arg[5];
+	int       retv;
 	pthread_t id[5];
 
 	for (i = 0; i < 5; i++)
+	{
 		pthread_mutex_init(&mutex[i], NULL);
+		retv = LOCK(&mutex[i]);
+		assert(retv == 0);
+	}
 
 	//P1
 	print(1, TIME);
@@ -53,56 +60,36 @@ void *func(void *arg)
 	int id = *(int *)arg;
 	id += 2;
 
-	int mutex_a;
-	int mutex_b;
+	int retv_a;
+	int retv_b;
 	switch(id)
 	{
 		case 2:
 			print(2, TIME);
-			while (LOCK(&mutex[0]) != 0) NULL;
-			while (LOCK(&mutex[1]) != 0) NULL;
+			retv_a = UNLOCK(&mutex[0]);
+			retv_b = UNLOCK(&mutex[1]);
+			assert(retv_a == 0);
+			assert(retv_b == 0);
 			break;
 		case 3:
 			print(3, TIME);
-			while (LOCK(&mutex[2]) != 0) NULL;
+			retv_a = UNLOCK(&mutex[2]);
+			assert(retv_a == 0);
 			break;
 		case 4:
-			while ((mutex_a = TRY_LOCK(&mutex[0])) == 0)
-			{
-#ifdef 		DEBUG
-				printf("4 mutex_a=%d\n", mutex_a);
-#endif
-				UNLOCK(&mutex[0]);
-				sleep(1);
-			}
+			LOCK(&mutex[0]);
 			print(4, TIME);
-			while (LOCK(&mutex[3]) != 0) NULL;
+			UNLOCK(&mutex[3]);
 			break;
 		case 5:
-			while (((mutex_a = TRY_LOCK(&mutex[1])) == 0) || 
-			       ((mutex_b = TRY_LOCK(&mutex[2])) == 0))
-			{
-#ifdef 		DEBUG
-				printf("5 mutex_a=%d mutex_b=%d\n", mutex_a, mutex_b);
-#endif
-				UNLOCK(&mutex[1]);
-				UNLOCK(&mutex[2]);
-				sleep(1);
-			}
+			LOCK(&mutex[1]);
+			LOCK(&mutex[2]);
 			print (5, TIME);
-			while (LOCK(&mutex[4]) != 0) NULL;
+			UNLOCK(&mutex[4]);
 			break;
 		case 6:
-			while (((mutex_a = TRY_LOCK(&mutex[3])) == 0) ||
-				   ((mutex_b = TRY_LOCK(&mutex[4])) == 0))
-			{
-#ifdef 		DEBUG
-				printf("6 mutex_a=%d mutex_b=%d\n", mutex_a, mutex_b);
-#endif
-				UNLOCK(&mutex[3]);
-				UNLOCK(&mutex[4]);
-				sleep(1);
-			}
+			LOCK(&mutex[3]);
+			LOCK(&mutex[4]);
 			print(6, TIME);
 			break;
 		default:
