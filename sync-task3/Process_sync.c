@@ -30,6 +30,7 @@ union semun
 	int val;
 	struct semid_ds *buf;
 	unsigned short *array;
+	struct seminfo *__buf;
 };
 
 int main()
@@ -86,7 +87,10 @@ int main()
 void seminit()
 {
 	int i;
-//	key_t key = ftok("./key", 'E');
+	struct sembuf spos[SEM_COUNT];
+	union semun arg;
+	unsigned short group[SEM_COUNT] = {0, 0, 0, 0, 0};
+	arg.array = group;
 	Sem = semget(IPC_PRIVATE, SEM_COUNT, 0666|IPC_CREAT|IPC_EXCL);
 	if (Sem < 0)
 	{
@@ -95,6 +99,17 @@ void seminit()
 			perror("semget");
 			exit(EXIT_FAILURE);
 		}
+	}
+
+/*	for (i = 0; i < SEM_COUNT; i++)
+	{
+		spos[i].sem_num = i;
+		spos[i].sem_op  = -1;
+		spos[i].sem_flg = IPC_NOWAIT;
+	}*/
+	if (semctl(Sem, SEM_COUNT, SETALL, arg) < 0)
+	{
+		perror("semop Init...");
 	}
 }
 
@@ -134,7 +149,7 @@ void print(int id, int count)
 	while (count--)
 	{
 		printf("I am Process %d\n", id);
-		sleep(1);
+	//	sleep(1);
 	}
 }
 
