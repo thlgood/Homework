@@ -7,19 +7,15 @@
 #include <sys/ipc.h>
 #include <sys/types.h>
 #include <sys/sem.h>
-#include <assert.h>
 #include <unistd.h>
 #include <errno.h>
 
-#define SEM_COUNT	5
-#define FINISHED    1
-#define UNFINISHED  2
-#define TIME        4 
+#define SEM_COUNT    5
+#define TIME         8 
 
-void seminit();
 void print(int id, int count);
-void finish_opt(int id);
-void try_opt(int id);
+void allocate_signal(int id);
+void free_signal(int id);
 void fork_process(int n);
 
 int flag = -1;
@@ -38,7 +34,8 @@ int main()
 	int   i;
 	pid_t ppid = getpid();
 	print (1, TIME);
-	seminit();	
+	
+	Sem = semget(IPC_PRIVATE, SEM_COUNT, 0666|IPC_CREAT|IPC_EXCL);
 
 	fork_process(5);
 	if (getpid() == ppid)
@@ -54,27 +51,27 @@ int main()
 	{
 		case 2:
 			print (2, TIME);
-			finish_opt(4);
-			finish_opt(1);
+			free_signal(0);
+			free_signal(1);
 			break;
 		case 3:
 			print (3, TIME);
-			finish_opt(2);
+			free_signal(2);
 			break;
 		case 4:
-			try_opt(0);
+			allocate_signal(0);
 			print (4, TIME);
-			finish_opt(3);
+			free_signal(3);
 			break;
 		case 5:
-			try_opt(1);
-			try_opt(2);
+			allocate_signal(1);
+			allocate_signal(2);
 			print (5, TIME);
-			finish_opt(4);
+			free_signal(4);
 			break;
 		case 6:
-			try_opt(3);
-			try_opt(4);
+			allocate_signal(3);
+			allocate_signal(4);
 			print (6, TIME);
 			break;
 		default:
@@ -84,61 +81,24 @@ int main()
 	return 0;
 }
 
-void seminit()
+void allocate_signal(int id)
 {
-	int i;
-	struct sembuf spos[SEM_COUNT];
-	union semun arg;
-	unsigned short group[SEM_COUNT] = {0, 0, 0, 0, 0};
-	arg.array = group;
-	Sem = semget(IPC_PRIVATE, SEM_COUNT, 0666|IPC_CREAT|IPC_EXCL);
-	if (Sem < 0)
-	{
-		if (errno != EEXIST)
-		{
-			perror("semget");
-			exit(EXIT_FAILURE);
-		}
-	}
+	struct sembuf spos = {id, -1, 0};
 
-/*	for (i = 0; i < SEM_COUNT; i++)
+	if (semop(Sem, &spos, 1))
 	{
-		spos[i].sem_num = i;
-		spos[i].sem_op  = -1;
-		spos[i].sem_flg = IPC_NOWAIT;
-	}*/
-	if (semctl(Sem, SEM_COUNT, SETALL, arg) < 0)
-	{
-		perror("semop Init...");
-	}
-}
-
-void try_opt(int id)
-{
-	struct sembuf spos;
-	spos.sem_num = id;
-	spos.sem_op  = -1;
-	spos.sem_flg = SEM_UNDO;
-
-	int retV = semop(Sem, &spos, 1);
-	if (retV == -1)
-	{
-		perror("semop in try");
+		perror("Allocate");
 		printf("ID:%d\n", id);
 	}
 }
 
-void finish_opt(int id)
+void free_signal(int id)
 {
-	struct sembuf spos;
-	spos.sem_num = id;
-	spos.sem_op  = 1;
-	spos.sem_flg = SEM_UNDO;
+	struct sembuf spos = {id, 1, IPC_NOWAIT};
 
-	int retV = semop(id, &spos, SEM_COUNT);
-	if (retV == -1)
+	if (semop(Sem, &spos, 1))
 	{
-		perror("semop in finish_opt");
+		perror("Free");
 		printf("ID:%d\n", id);
 	}
 }
@@ -149,7 +109,6 @@ void print(int id, int count)
 	while (count--)
 	{
 		printf("I am Process %d\n", id);
-	//	sleep(1);
 	}
 }
 

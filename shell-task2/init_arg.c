@@ -39,7 +39,7 @@ bool input(char *line)
 	line[BUF_LEN - 1] = '\0';
 	char buf;
 
-	fputs("Input> ", stdout);
+	fputs("> ", stdout);
 
 	while (count < (BUF_LEN) && (buf = getchar()))
 	{
