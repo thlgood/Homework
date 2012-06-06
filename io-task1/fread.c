@@ -17,10 +17,21 @@ int main(int argc, char *argv[])
 	char buf_one[BLOCK_SIZE];
 	char buf_two[BLOCK_SIZE];
 	size_t count;
+
+	char flag = 0;
 	while (count = fread(buf_one, 1, BLOCK_SIZE, fp_in))
 	{
 		revCopy(buf_one, buf_two, count);
-		fwrite(buf_two, 1, count, temp_fp);
+		if (0 == flag)
+		{
+			fwrite(buf_two, 1, count, temp_fp);
+			flag++;
+		}
+		else
+		{
+			fseek(temp_fp, count, SEEK_SET);
+			fwrite(buf_two, 1, count, temp_fp);
+		}
 		if (count != BLOCK_SIZE)
 			break;
 	}
