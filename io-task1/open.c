@@ -1,57 +1,50 @@
 #include <stdio.h>
-#include <fcntl.h>
 #include <stdlib.h>
-#include <string.h>
-#include <sys/stat.h>	//S_IRUSR etc in open() function!
+#include <unistd.h>
+#include <fcntl.h>
+
+#define BLOCK_SIZE 256
+
+void revCopy(char *strOne, char *strTwo, size_t size);
 
 int main(int argc, char *argv[])
 {
-	int 	fd;
-	size_t 	bufused = 0;
-	size_t  bufsize = BUFSIZ;
-	size_t  read_last = 0;
-	char 	*buf = malloc(sizeof(char)*BUFSIZ);
-
-	if(argc != 2)
+	if (argc < 2)
 	{
-		fputs("Too less argument!\n", stderr);
-		return 1;
+		fputs("Too lss argument!", stderr);
+		exit(EXIT_FAILURE);
 	}
-
-	if((fd = open(argv[1], O_RDONLY)) == 0)
-	{
-		perror("open");
-		return 1;
-	}
-
-
-	while ((read_last = read(fd, &buf[bufused], BUFSIZ)) == BUFSIZ)
-	{
-		bufused += BUFSIZ;
-		if((bufsize-bufused) < BUFSIZ)
-		{
-			buf = realloc(buf, bufsize+BUFSIZ);
-			bufsize += BUFSIZ;
-		}
-	}
-	bufused += read_last;
-	close(fd);
 	
-	size_t bufprint = bufused;
-	if((fd = open(	argv[1], 
-					O_WRONLY|O_CREAT, 
-  					S_IRUSR|S_IWUSR|S_IROTH)) == 0)
+	int fdOne = open(argv[1], O_RDONLY);
+	int fdTwo = creat("temp_file", 00644);
+	char buf_one[BLOCK_SIZE];
+	char buf_two[BLOCK_SIZE];
+	size_t count;
+	
+	while ((count = read(fdOne, buf_one, BLOCK_SIZE)) && count != -1)
 	{
-		perror("open");
-		return 1;
-	}
-	while (bufprint != 0)
-	{
-		write(fd, &buf[--bufprint], 1);
+		revCopy(buf_one, buf_two, count);
+		write(fdTwo, buf_two, count);
+		if (count != BLOCK_SIZE) 
+			break;
 	}
 
-	close(fd);
-	free(buf);
+	close(fdOne);
+	close(fdTwo);
+	remove(argv[1]);
+	if(rename("temp_file", argv[1]) != 0)
+	{
+		perror("rename");
+		exit(EXIT_FAILURE);
+	}
 
 	return 0;
+}
+void revCopy(char *strOne, char *strTwo, size_t size)
+{
+	size_t temp;
+	for (temp = 0; temp < size; temp++)
+	{
+		strTwo[temp] = strOne[size-temp-1];
+	}
 }

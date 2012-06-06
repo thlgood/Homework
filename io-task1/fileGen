@@ -2,17 +2,17 @@
 
 pad_str = '0123456789ABCDEF'
 
-file = open("4K.in", "w")
+file = open("InputFile/4K.in", "w")
 for x in xrange(0, 4*1024/16):
 	file.write(pad_str) 
 file.close()
 
-file = open("256K.in", "w")
+file = open("InputFile/256K.in", "w")
 for x in xrange(0, 256*1024/16):
 	file.write(pad_str)
 file.close()
 
-file = open("64M.in", "w")
+file = open("InputFile/64M.in", "w")
 for x in xrange(0, 1024*1024*64/16):
 	file.write(pad_str)
 file.close()
