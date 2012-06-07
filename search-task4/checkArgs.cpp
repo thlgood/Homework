@@ -11,8 +11,8 @@ void checkArgs(int *argc, char ***argv)
     pthread_count = 1;
     if (*argc < 3)
     {
-        fputs("Too argument!\n", stderr);
-        exit(1);
+		fputs("Too less argument!\n", stderr);
+		exit(1);
     }
     if (!strcmp((*argv)[1],  "-j"))
     {
