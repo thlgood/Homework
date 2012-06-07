@@ -24,6 +24,8 @@ void *update_empty_list()
 
             *(size_value + 1) = 0; // NULL
             *(size_value + 1) = 0; // NULL
+
+            pool_empty = pool_head;
         }
     }
 }

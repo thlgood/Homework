@@ -31,7 +31,20 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="common.h" />
+		<Unit filename="init.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="main.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="mem_allocate.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="mem_free.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="pool_ptr.c">
 			<Option compilerVar="CC" />
 		</Unit>
 		<Extensions>
