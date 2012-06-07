@@ -11,7 +11,7 @@ static char** vecting(char *dst_string)
 	int v_count = 0;       //vector count
  
 	while (*flag != '\0')
-    	{
+   	{
 		if (*flag == ' ' || *flag == '\n' || *flag == '\t')
 		{
 			*flag = '\0';
