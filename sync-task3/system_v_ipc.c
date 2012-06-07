@@ -43,63 +43,62 @@ static void print(int id, int count)
 
 int main()
 {
-    Sem = semget(IPC_PRIVATE, 7, 0666|IPC_CREAT|IPC_EXCL);
-    if (fork() == 0) //P2
-    {
-        allocate_signal(0);
-        print(2, TIME);
-        free_signal(2);
-        free_signal(3);
-    }
-    else
-    {
-        if (0 == fork()) //P3
-        {
-            allocate_signal(1);
-            print(3, TIME);
-            free_signal(4);
-        }
-        else
-        {
-            if (0 == fork()) // P4
-            {
-                allocate_signal(2);
-                print(4, TIME);
-                free_signal(5);
-            }
-            else
-            {
-                if (0 == fork()) // P5
-                {
-                    allocate_signal(3);
-                    allocate_signal(4);
-                    print(5, TIME);
-                    free_signal(6);
-                }
-                else
-                {
-                    if (0 == fork()) // P6
-                    {
-                        allocate_signal(5);
-                        allocate_signal(6);
-                        print(6, TIME);
-                    }
-                    else // P1
-                    {
-                        print(1, TIME);
-                        free_signal(0);
-                        free_signal(1);
-                        wait(NULL);
-                        wait(NULL);
-                        wait(NULL);
-                        wait(NULL);
-                        wait(NULL);
-                    }
-                }
-            }
-        }
-
-    }
+	Sem = semget(IPC_PRIVATE, 7, 0666|IPC_CREAT|IPC_EXCL);
+	if (fork() == 0) //P2
+	{
+		allocate_signal(0);
+		print(2, TIME);
+		free_signal(2);
+		free_signal(3);
+	}
+	else
+	{
+		if (0 == fork()) //P3
+		{
+			allocate_signal(1);
+			print(3, TIME);
+			free_signal(4);
+		}
+		else
+		{
+			if (0 == fork()) // P4
+			{
+				allocate_signal(2);
+				print(4, TIME);
+				free_signal(5);
+			}
+			else
+			{
+				if (0 == fork()) // P5
+				{
+					allocate_signal(3);
+					allocate_signal(4);
+					print(5, TIME);
+					free_signal(6);
+				}
+				else
+				{
+					if (0 == fork()) // P6
+					{
+						allocate_signal(5);
+						allocate_signal(6);
+						print(6, TIME);
+					}
+ 					else // P1
+					{
+						print(1, TIME);
+						free_signal(0);
+						free_signal(1);
+						wait(NULL);
+						wait(NULL);
+						wait(NULL);
+						wait(NULL);
+						wait(NULL);
+					}
+				}
+			}
+		}
+	}
     return 0;
 }
 
