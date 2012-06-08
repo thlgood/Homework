@@ -42,21 +42,6 @@ void *mem_allocate(int size)
 	}
 	else if ((TO_ABS_INT(finder)) - size > 8)
 	{
-		/*void *fb_tail;
-		void *eb_head;
-		int   bl_size   = TO_ABS_INT(finder);
-		TO_INT(finder)  = size + 8;
-		fb_tail = finder + size + 4;
-		TO_INT(fb_tail) = size + 8;
-		
-		int eb_size = bl_size - size - 8;
-		eb_head = fb_tail + 4;
-		OT_INT(eb_head) = eb_size * -1;
-		eb_head = eb_head + size - 4;
-		TO_INT(eb_head) = eb_size * -1;
-		
-		return finder - 4;*/
-		
 		void *eb_head;
 		void *eb_tail;
 		//bl_size = eb_size + fb_size
