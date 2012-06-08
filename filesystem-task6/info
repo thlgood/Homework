@@ -1,0 +1,19 @@
+fs is not a block special device.
+无论如何也要继续? (y,n) 文件系统标签=
+操作系统:Linux
+块大小=1024 (log=0)
+分块大小=1024 (log=0)
+Stride=0 blocks, Stripe width=0 blocks
+64 inodes, 512 blocks
+25 blocks (4.88%) reserved for the super user
+第一个数据块=1
+Maximum filesystem blocks=524288
+1 block group
+8192 blocks per group, 8192 fragments per group
+64 inodes per group
+
+正在写入inode表: 0/1完成                            
+Writing superblocks and filesystem accounting information: 完成
+
+This filesystem will be automatically checked every 30 mounts or
+180 days, whichever comes first.  Use tune2fs -c or -i to override.

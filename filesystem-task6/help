@@ -1,0 +1,12 @@
+----------------Welcome-------------
+  EFB:   Ext2 file system browser
+  usage: efb <file_system>
+
+-----------------HELP---------------
+ls    列出当前目录的所有文件(包括隐藏文件)
+cd    改变工作目录
+cat   显示文件内容
+exit  退出
+
+作者:   唐恒亮(1005010305)
+E-Mail: yucoat@yucoat.com
