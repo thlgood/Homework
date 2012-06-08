@@ -4,15 +4,27 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <assert.h>
+#include <stdbool.h>
+#include <errno.h>
+#include <string.h>
 
-#define BUFSIZE 1024
+#define BUF_LENGTH 1024*64
 
-//4个字节为一个单元
-typedef uint32_t Unit4;
+#define TO_INT(a)      (*(int *)a)
+#define INT_PTR(a)     (int *)a
+#define TO_ABS_INT(a)  abs(*(int *)a)
 
-extern pool_head;
-extern pool_tail;
+extern void *pool_head;
+extern void *pool_tail;
 
-void *update_empty_list();
+void *mem_allocate(int size);
+void *mem_free(void *p);
+
+
+inline void *jump_to_tail(void *head);
+inline void *jump_to_head(void *tail);
+inline void *jump_to_last(void *head);
+inline void *jump_to_next(void *tail);
 
 #endif
