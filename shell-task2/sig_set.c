@@ -3,18 +3,19 @@
 #include <signal.h>
 #include <unistd.h>
 
+/*
+ *收到SIGCHLD信号之后的回调函数
+ */
 static void wait_child(int sig_type)
 {
 	int status;
 	pid_t pid = wait(&status);
 	del_from_PL(pid);
-	/*
-	if (del_from_PL(pid) != true)
-	{
-		fprintf(stderr, "DELETE %d from PL was failure!\n", pid);
-	}*/
 }
 
+/*
+ *设置信号，当子进程退出的时候会收到SIGCHLD信号
+ */
 void signal_set()
 {
 

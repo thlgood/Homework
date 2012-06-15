@@ -1,0 +1,4 @@
+作者：唐恒亮
+该程序中定义的两个mem_allocate和mem_free能替代malloc和free。
+但可能存在未知的BUG和性能问题
+如有任何问题，请与我联系yucoat@yucoat.com

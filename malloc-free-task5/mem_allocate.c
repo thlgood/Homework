@@ -1,11 +1,17 @@
 #include "common.h"
 
+
+//块的起始位置
 void *pool_head = NULL;
+//块末尾的位置
 void *pool_tail = NULL;
 
 void *mem_allocate(int size)
 {
+	//确定要分配的大小，保证size%8 == 0
 	size = (size % 8 == 0) ? size: ((size/8) + 1) * 8;
+
+
 	if (NULL == pool_head)
 	{
 		pool_head = sbrk(BUF_LENGTH);
@@ -44,7 +50,6 @@ void *mem_allocate(int size)
 	{
 		void *eb_head;
 		void *eb_tail;
-		//bl_size = eb_size + fb_size
 		int  bl_size = TO_ABS_INT(finder);
 		int  fb_size = size + 8;
 		int  eb_size = bl_size - fb_size;

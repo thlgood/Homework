@@ -1,12 +1,13 @@
 #include "PL.h"
 #include "Process.h"
-
+/*
+ *输出整个子进程列表
+ */
 void show_PL()
 {
 	PL *temp = PL_head;
 	if (PL_head == NULL)
 		return;
-
 	printf("CMD           PID\n");
 	while (temp != NULL)
     {
@@ -14,7 +15,10 @@ void show_PL()
 		temp = temp->next;
 	}
 }
-
+/*
+ *add_to_PL加入到紫禁城列表 
+ *返回True、False
+ */
 bool add_to_PL(Process *child)
 {
 	PL *temp = MALLOC_PL;
@@ -48,10 +52,9 @@ void free_PL()
 	}
 }
 
-/*bool del_from_PL(pid_t pid)
-{
-	return false;
-}*/
+/*
+ *将程序的信息从PL表中删除
+ */
 bool del_from_PL(pid_t pid)
 {
 	PL *temp_first = PL_head;

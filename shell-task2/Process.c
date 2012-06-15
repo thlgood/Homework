@@ -1,6 +1,9 @@
 #include "Tshell.h"
 #include "Process.h"
 
+/*
+ *将dst_string字符串转化成二维数组，该二维数组作为exec函数的参数
+ */
 static char** vecting(char *dst_string)
 {
 	char *cstring = (char *)malloc((strlen(dst_string) + 1));
@@ -46,6 +49,10 @@ static char** vecting(char *dst_string)
 	return cvector;
 }
 
+/*
+ *
+ * 创建运行子进程之前的初始工作
+ */
 bool init_process(char *Line, Process *child)
 {
 	char **temp = child->vect = vecting(Line);

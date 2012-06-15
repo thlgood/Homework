@@ -24,6 +24,7 @@ int main()
 	int       retv;
 	pthread_t id[5];
 
+	//创建5个互斥锁并将锁住
 	for (i = 0; i < 5; i++)
 	{
 		pthread_mutex_init(&mutex[i], NULL);
@@ -31,15 +32,17 @@ int main()
 		assert(retv == 0);
 	}
 
-	//P1
+	//P1完成输出工作
 	print(1, TIME);
 
+	//创建五个线程
 	for (i = 0; i < 5; i++)
 	{
 		arg[i] = i;
 		pthread_create(&id[i], NULL, func, (void *)&arg[i]);
 	}
 
+	//等待线程的退出
 	for (i = 0; i < 5; i++)
 	{
 		pthread_join(id[i], NULL);
